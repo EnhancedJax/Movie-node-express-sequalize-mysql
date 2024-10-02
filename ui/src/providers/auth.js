@@ -1,4 +1,5 @@
 "use client";
+import { setAuthToken } from "@/api";
 import {
   getUserProfile,
   loginUser,
@@ -20,26 +21,12 @@ export function AuthProvider({ children }) {
   const router = useRouter();
   const { toast } = useToast();
 
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = async () => {
-    try {
-      const response = await getUserProfile();
-      setUser(response.data);
-    } catch (error) {
-      console.error("Error checking auth status:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const login = async (credentials) => {
     try {
       const response = await loginUser(credentials.email, credentials.password);
       setUser(response.data);
       localStorage.setItem("token", response.data.token);
+      setAuthToken(response.data.token);
       router.push("/");
       toast({
         title: "Login successful",
@@ -62,6 +49,7 @@ export function AuthProvider({ children }) {
       );
       setUser(response.data);
       localStorage.setItem("token", response.data.token);
+      setAuthToken(response.data.token);
       router.push("/");
       toast({
         title: "Signup successful",
@@ -79,6 +67,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("token");
+    setAuthToken(null);
     router.push("/");
     toast({
       title: "Logged out",
@@ -112,6 +101,30 @@ export function AuthProvider({ children }) {
       });
     }
   };
+
+  const checkAuthStatus = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
+      if (token) {
+        setAuthToken(token);
+        const response = await getUserProfile();
+        setUser(response.data);
+        toast({
+          title: "Login successful",
+          description: "Welcome to our platform!",
+        });
+      }
+    } catch (error) {
+      console.error("Error checking auth status:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   const value = {
     user,

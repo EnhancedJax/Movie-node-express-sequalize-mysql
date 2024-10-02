@@ -14,7 +14,7 @@ export default function SeatLayoutBuilder({ value, onChange }) {
   };
 
   const addRow = () => {
-    const newRow = Array(cols).fill(0);
+    const newRow = Array(cols).fill(1);
     onChange([...value, newRow]);
     setRows(rows + 1);
   };
@@ -27,7 +27,7 @@ export default function SeatLayoutBuilder({ value, onChange }) {
   };
 
   const addColumn = () => {
-    const newLayout = value.map((row) => [...row, 0]);
+    const newLayout = value.map((row) => [...row, 1]);
     onChange(newLayout);
     setCols(cols + 1);
   };

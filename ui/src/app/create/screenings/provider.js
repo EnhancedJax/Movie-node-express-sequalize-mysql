@@ -17,9 +17,8 @@ export function ScreeningProvider({ children }) {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pendingScreenings, setPendingScreenings] = useState([]);
-  const { toast } = useToast();
-
   const [formScreenings, setFormScreenings] = useState([]);
+  const { toast } = useToast();
 
   const form = useForm({
     defaultValues: {

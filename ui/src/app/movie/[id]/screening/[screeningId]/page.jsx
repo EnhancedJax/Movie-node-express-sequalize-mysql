@@ -1,7 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { SEAT_LABELS, SEAT_TYPES } from "@/constants/seat";
+import { handleDownloadQRCode } from "@/utils/qrCode";
+import { useRouter } from "next/navigation";
+import QRCode from "react-qr-code";
 import { SeatSelectionProvider, useSeatSelection } from "./provider";
 
 function SeatSelectionPage() {
@@ -13,8 +22,10 @@ function SeatSelectionPage() {
     getTotalCost,
     handlePurchase,
     screening,
+    bookingId,
   } = useSeatSelection();
   const { markedSeatLayout } = screening;
+  const router = useRouter();
 
   return (
     <div className="p-4">
@@ -78,10 +89,28 @@ function SeatSelectionPage() {
         <p>Total Cost: ${getTotalCost()}</p>
       </div>
       <div className="flex justify-between">
+        <Button onClick={() => router.back()}>Cancel</Button>
         <Button onClick={handlePurchase} disabled={selectedSeats.length === 0}>
           Purchase
         </Button>
       </div>
+
+      <Dialog open={!!bookingId} onOpenChange={() => router.back()}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Booking Confirmation</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center">
+            <div id="qr-code" className="mb-4">
+              <QRCode value={`https://example.com/booking/${bookingId}`} />
+            </div>
+            <div className="flex space-x-4">
+              <Button onClick={handleDownloadQRCode}>Download QR Code</Button>
+              <Button onClick={() => router.push("/")}>Back to Home</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

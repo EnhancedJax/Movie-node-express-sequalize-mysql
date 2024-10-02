@@ -19,7 +19,7 @@ const User = sequelize.define(
       },
     },
     passwordHash: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(512),
       allowNull: false,
     },
   },
@@ -36,15 +36,11 @@ User.beforeCreate(async (user) => {
   user.passwordHash = await bcrypt.hash(user.passwordHash, salt);
 });
 
-User.beforeSave(async (user) => {
+User.beforeUpdate(async (user) => {
   if (user.changed("passwordHash")) {
     const salt = await bcrypt.genSalt(10);
     user.passwordHash = await bcrypt.hash(user.passwordHash, salt);
   }
 });
-
-User.prototype.comparePassword = function (candidatePassword) {
-  return bcrypt.compareSync(candidatePassword, this.passwordHash);
-};
 
 export default User;

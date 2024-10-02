@@ -1,4 +1,9 @@
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Booking from "../models/booking.js";
+import Movie from "../models/movie.js";
+import Screening from "../models/screening.js";
+import Theater from "../models/theater.js";
 import User from "../models/user.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
@@ -8,6 +13,10 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "1d",
   });
+};
+
+const comparePassword = (password, passwordHash) => {
+  return bcrypt.compareSync(password, passwordHash);
 };
 
 export const registerUser = asyncHandler(async (req, res) => {
@@ -71,7 +80,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ where: { email } });
 
-  if (user && (await user.comparePassword(password))) {
+  if (user && comparePassword(password, user.passwordHash)) {
     res.json({
       id: user.id,
       email: user.email,
@@ -87,10 +96,53 @@ export const loginUser = asyncHandler(async (req, res) => {
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findByPk(req.user.id, {
     attributes: { exclude: ["passwordHash"] },
+    include: [
+      {
+        model: Booking,
+        where: { isViewed: false },
+        required: false,
+        include: [
+          {
+            model: Screening,
+            include: [
+              { model: Movie, paranoid: false },
+              { model: Theater, paranoid: false },
+            ],
+          },
+        ],
+      },
+    ],
   });
 
   if (user) {
-    res.json(user);
+    const bookings = user.Bookings || [];
+    const formattedBookings = bookings.map((booking) => ({
+      ...booking.toJSON(),
+      Screening: booking.Screening
+        ? {
+            id: booking.Screening.id,
+            startTime: booking.Screening.startTime,
+            Movie: {
+              id: booking.Screening.Movie.id,
+              title: booking.Screening.Movie.title,
+            },
+            Theater: {
+              id: booking.Screening.Theater.id,
+              name: booking.Screening.Theater.name,
+            },
+          }
+        : null,
+    }));
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      createdAt: user.createdAt,
+      bookings: {
+        items: formattedBookings,
+        count: formattedBookings.length,
+      },
+    });
   } else {
     res.status(404);
     throw new Error("User not found");
@@ -154,7 +206,7 @@ export const updateUserPassword = asyncHandler(async (req, res) => {
 
   const user = await User.findByPk(req.user.id);
 
-  if (user && (await user.comparePassword(oldPassword))) {
+  if (user && comparePassword(oldPassword, user.passwordHash)) {
     // Use the beforeCreate hook indirectly by updating the passwordHash
     user.passwordHash = newPassword;
     await user.save();

@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -11,55 +12,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/providers/auth";
-import { useRouter } from "next/navigation";
+import { handleDownloadQRCode } from "@/utils/qrCode";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import QRCode from "react-qr-code";
+import { UserProvider, useUser } from "./provider";
 
-export default function UserProfilePage() {
-  const { user, updateProfile } = useAuth();
-  const router = useRouter();
-  const [isChangingEmail, setIsChangingEmail] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
+function UserProfilePage() {
+  const { user } = useAuth();
+  const {
+    emailForm,
+    passwordForm,
+    handleEmailUpdate,
+    handlePasswordUpdate,
+    isChangingEmail,
+    isChangingPassword,
+    setIsChangingEmail,
+    setIsChangingPassword,
+  } = useUser();
 
-  const emailForm = useForm({
-    defaultValues: {
-      email: user?.email || "",
-    },
-  });
-
-  const passwordForm = useForm({
-    defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmNewPassword: "",
-    },
-  });
-
-  const handleEmailUpdate = async (data) => {
-    await updateProfile(data.email);
-    setIsChangingEmail(false);
-  };
-
-  const handlePasswordUpdate = async (data) => {
-    if (data.newPassword !== data.confirmNewPassword) {
-      passwordForm.setError("confirmNewPassword", {
-        type: "manual",
-        message: "Passwords do not match",
-      });
-      return;
-    }
-    await updateProfile(null, data.oldPassword, data.newPassword);
-    setIsChangingPassword(false);
-    passwordForm.reset();
-  };
-
-  if (!user) {
-    router.push("/auth");
-    return null;
-  }
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   return (
-    <div className="container max-w-md mx-auto mt-10">
+    <div className="container max-w-2xl mx-auto mt-10">
       <Card>
         <CardHeader>
           <CardTitle>User Profile</CardTitle>
@@ -173,6 +147,64 @@ export default function UserProfilePage() {
           </div>
         </CardContent>
       </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle>Your Tickets</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {user.bookings.items.map((booking) => (
+            <div
+              key={booking.id}
+              className="flex items-center p-4 mb-4 border rounded-lg"
+            >
+              <div
+                className="mr-4 cursor-pointer"
+                onClick={() => setSelectedBooking(booking)}
+              >
+                <QRCode value={booking.id} size={100} />
+              </div>
+              <div>
+                <h3 className="font-semibold">
+                  {booking.Screening.Movie.title}
+                </h3>
+                <p>Theater: {booking.Screening.Theater.name}</p>
+                <p>
+                  Date: {new Date(booking.Screening.startTime).toLocaleString()}
+                </p>
+                <p>Seats: {booking.seats.join(", ")}</p>
+              </div>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Dialog
+        open={!!selectedBooking}
+        onOpenChange={() => setSelectedBooking(null)}
+      >
+        <DialogContent className="sm:max-w-md">
+          <div className="flex flex-col items-center">
+            <div id="qr-code">
+              <QRCode value={selectedBooking?.id || ""} size={200} />
+            </div>
+            <div className="mt-4 space-x-2">
+              <DialogClose asChild>
+                <Button variant="outline">Close</Button>
+              </DialogClose>
+              <Button onClick={handleDownloadQRCode}>Download</Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
+  );
+}
+
+export default function WrappedUserProfilePage() {
+  return (
+    <UserProvider>
+      <UserProfilePage />
+    </UserProvider>
   );
 }

@@ -24,7 +24,6 @@ export const getScreenings = asyncHandler(async (req, res) => {
       "remainingPercentage",
     ],
     where: {},
-    paranoid: false,
   };
 
   if (theaterId) {
@@ -43,10 +42,10 @@ export const getScreenings = asyncHandler(async (req, res) => {
   if (populate === "Movie" || populate === "Theater") {
     options.include = [];
     if (populate === "Movie") {
-      options.include.push({ model: Movie });
+      options.include.push({ model: Movie, paranoid: false });
     }
     if (populate === "Theater") {
-      options.include.push({ model: Theater });
+      options.include.push({ model: Theater, paranoid: false });
     }
   }
 

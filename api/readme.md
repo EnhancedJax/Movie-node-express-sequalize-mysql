@@ -1,5 +1,7 @@
 # Ticketing backend
 
+---
+
 ```
 brew install mysql
 mysql.server restart
@@ -10,7 +12,19 @@ npm i
 npm run dev
 ```
 
+## Stack
+
+- Node.js
+- Express
+- MySQL
+- Sequalize
+- JWT
+- Bcrypt
+- CORS
+
 # Ticketing Backend API Documentation
+
+---
 
 ## Base URL
 

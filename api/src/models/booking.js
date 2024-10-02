@@ -29,6 +29,10 @@ const Booking = sequelize.define(
     seats: {
       type: DataTypes.JSON,
     },
+    isViewed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     tableName: "bookings",

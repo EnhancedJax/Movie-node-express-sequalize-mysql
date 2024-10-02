@@ -12,6 +12,7 @@ export const useSeatSelection = () => useContext(SeatSelectionContext);
 export function SeatSelectionProvider({ children, screeningId }) {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [screening, setScreening] = useState(null);
+  const [bookingId, setBookingId] = useState(null);
   const { toast } = useToast();
   const router = useRouter();
   const getScreeningDetails = async (screeningId) => {
@@ -61,7 +62,9 @@ export function SeatSelectionProvider({ children, screeningId }) {
 
   const handlePurchase = async () => {
     try {
-      await api.createBooking({
+      const {
+        data: { id },
+      } = await api.createBooking({
         screeningId: screening.id,
         seats: selectedSeats,
       });
@@ -69,7 +72,7 @@ export function SeatSelectionProvider({ children, screeningId }) {
         title: "Tickets Purchased!",
         description: `You have purchased seats: ${selectedSeats.join(", ")}`,
       });
-      router.back();
+      setBookingId(id);
     } catch (error) {
       toast({
         title: "Purchase Failed",
@@ -93,6 +96,7 @@ export function SeatSelectionProvider({ children, screeningId }) {
         getTotalCost,
         handlePurchase,
         screening,
+        bookingId,
       }}
     >
       {screening ? children : <Loader />}

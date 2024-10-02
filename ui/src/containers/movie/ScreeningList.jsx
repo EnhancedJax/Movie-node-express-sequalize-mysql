@@ -32,37 +32,62 @@ export default function ScreeningsList({ cinemas }) {
 
   const weekDates = generateWeekDates();
 
+  const getScreeningsCountForDate = (date) => {
+    return (
+      cinemas?.items?.reduce((count, cinema) => {
+        return (
+          count +
+          filterScreeningsByDate(cinema.screenings?.items || [], date).length
+        );
+      }, 0) || 0
+    );
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-center mb-4 space-x-2">
-        {weekDates.map((date, index) => (
-          <Button
-            key={index}
-            onClick={() => setSelectedDate(date)}
-            variant={
-              date.toDateString() === selectedDate.toDateString()
-                ? "default"
-                : "outline"
-            }
-          >
-            {date.toLocaleDateString("en-US", {
-              weekday: "short",
-              month: "short",
-              day: "numeric",
-            })}
-          </Button>
-        ))}
+        {weekDates.map((date, index) => {
+          const screeningsCount = getScreeningsCountForDate(date);
+          return (
+            <Button
+              key={index}
+              onClick={() => setSelectedDate(date)}
+              variant={
+                date.toDateString() === selectedDate.toDateString()
+                  ? "default"
+                  : "outline"
+              }
+              disabled={screeningsCount === 0}
+              className={screeningsCount === 0 ? "opacity-50" : ""}
+            >
+              <div className="flex flex-col items-center">
+                <span>
+                  {date.toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
+                {screeningsCount > 0 && (
+                  <span className="text-xs">{screeningsCount} screenings</span>
+                )}
+              </div>
+            </Button>
+          );
+        })}
       </div>
       {cinemas?.items?.length > 0 ? (
-        cinemas.items.map((cinema) => (
-          <div key={cinema.id} className="mb-8">
-            <h3 className="mb-4 text-xl font-bold">{cinema.name}</h3>
-            <div className="flex flex-wrap gap-4">
-              {cinema?.screenings?.items &&
-                filterScreeningsByDate(
-                  cinema.screenings.items,
-                  selectedDate
-                ).map((screening) =>
+        cinemas.items.map((cinema) => {
+          const filteredScreenings = filterScreeningsByDate(
+            cinema.screenings?.items || [],
+            selectedDate
+          );
+          if (filteredScreenings.length === 0) return null;
+          return (
+            <div key={cinema.id} className="mb-8">
+              <h3 className="mb-4 text-xl font-bold">{cinema.name}</h3>
+              <div className="flex flex-wrap gap-4">
+                {filteredScreenings.map((screening) =>
                   screening.remainingPercentage === 0 ? (
                     <Button
                       key={screening.id}
@@ -112,9 +137,10 @@ export default function ScreeningsList({ cinemas }) {
                     </Link>
                   )
                 )}
+              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <p>No screenings found for this day.</p>
       )}
