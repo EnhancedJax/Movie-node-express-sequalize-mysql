@@ -2,7 +2,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import sequelize from "./config/database.js";
-import init from "./init.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import setupAssociations from "./models/associations.js";
 import bookingRoutes from "./routes/bookings.js";
@@ -36,10 +35,6 @@ sequelize
   .sync({ alter: true }) // Use { force: true } to drop and recreate tables (be careful in production)
   .then(() => {
     console.log("Database synced");
-    var args = process.argv.slice(2);
-    if (args.includes("init")) {
-      init();
-    }
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => {

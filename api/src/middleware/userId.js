@@ -13,6 +13,7 @@ export const userId = asyncHandler(async (req, res, next) => {
   }
 
   if (!token) {
+    next();
     return;
   }
 

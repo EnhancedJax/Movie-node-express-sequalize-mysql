@@ -1,4 +1,3 @@
-import { LenisScroller } from "@/components/LenisScroller";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/providers/auth";
@@ -34,7 +33,6 @@ export default function RootLayout({ children }) {
           <Toaster />
         </AuthProvider>
       </body>
-      <LenisScroller />
     </html>
   );
 }
