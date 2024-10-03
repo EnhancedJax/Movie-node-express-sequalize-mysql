@@ -14,6 +14,8 @@ npm run dev
 
 ## Back end with Node.js, Express, Sequalize, MySQL
 
+You can import the Postman collection from the `Ticketing.postman_collection.json` file for testing the API.
+
 To install MySQL and create the env file:
 
 ```

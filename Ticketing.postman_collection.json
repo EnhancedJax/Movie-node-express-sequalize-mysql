@@ -1,0 +1,805 @@
+{
+	"info": {
+		"_postman_id": "38adb806-3e66-4d6e-ba69-f5378e188bc3",
+		"name": "Ticketing",
+		"description": "Postman documentation for Movie Ticketing Full-Stack app.\n\nTo make queries as a logged in user, set the Authorization as Bearer Token above and use the token variable.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37041171"
+	},
+	"item": [
+		{
+			"name": "Movie",
+			"item": [
+				{
+					"name": "getMovies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/movies?page=1&limit=2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMovie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/movies/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMovieDetailedWithScreening",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/movies/1/screening",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies",
+								"1",
+								"screening"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createMovie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Hello world\",\n    \"description\": \"\",\n    \"duration\": \"100\",\n    \"release_date\": \"2004-12-30\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/movies",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateMovie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/movies?id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteMovie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/movies?id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"movies"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON",
+									"const responseJson = pm.response.json();",
+									"",
+									"// Check if the token exists and store it in a collection variable",
+									"if (responseJson.token) {",
+									"    pm.collectionVariables.set(\"token\", responseJson.token);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@gmail.com\",\n    \"password\": \"Qqq-12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/register",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON",
+									"const responseJson = pm.response.json();",
+									"",
+									"// Check if the token exists and store it in a collection variable",
+									"if (responseJson.token) {",
+									"    pm.collectionVariables.set(\"token\", responseJson.token);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@gmail.com\",\n    \"password\": \"Qqq-12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProfile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/profile",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserEmail",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response JSON",
+									"const responseJson = pm.response.json();",
+									"",
+									"// Check if the token exists and store it in a collection variable",
+									"if (responseJson.token) {",
+									"    pm.collectionVariables.set(\"token\", responseJson.token);",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"admin@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/update-email",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"update-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUserPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\":\"1\",\n    \"newPassword\":\"Qqq-12345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/update-password",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								"update-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Theater",
+			"item": [
+				{
+					"name": "getTheaters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/theaters/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"theaters",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getTheater",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/theaters/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"theaters",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createTheater",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"HKU\",\n  \"screenDistance\": 15,\n  \"cinemaId\": \"1\",\n  \"seatLayout\": [\n    [0, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 2, 2, 2, 2, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [0, 1, 1, 1, 1, 1, 1, 0]\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/theaters/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"theaters",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTheater",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"HKU1\",\n  \"location\": \"HKU Location\",\n  \"screen_distance\": 15,\n  \"lat\": 0.0,\n  \"lng\": 0.0,\n  \"seat_layout\": [\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 2, 2, 2, 2, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [0, 1, 1, 1, 1, 1, 1, 0]\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/theaters/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"theaters",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cinema",
+			"item": [
+				{
+					"name": "getCinemas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cinemas/?populate=Theaters",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cinemas",
+								""
+							],
+							"query": [
+								{
+									"key": "populate",
+									"value": "Theaters"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCinema",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/cinemas/2",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cinemas",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCinema",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"HKU\",\n  \"location\": \"HKU\",\n  \"lat\": 0.0,\n  \"lng\": 0.0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cinemas/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cinemas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCinema",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"HKU1\",\n  \"location\": \"HKU Location\",\n  \"screen_distance\": 15,\n  \"lat\": 0.0,\n  \"lng\": 0.0,\n  \"seat_layout\": [\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 2, 2, 2, 2, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [0, 1, 1, 1, 1, 1, 1, 0]\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/cinemas/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"cinemas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Screenings",
+			"item": [
+				{
+					"name": "getScreenings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/screenings/?populate",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"screenings",
+								""
+							],
+							"query": [
+								{
+									"key": "populate",
+									"value": null,
+									"description": "Movie / Theater"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getScreening",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/screenings/2?populate=Theater",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"screenings",
+								"2"
+							],
+							"query": [
+								{
+									"key": "populate",
+									"value": "Theater"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createScreening",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"movieId\": \"1\",\n  \"theaterId\": \"1\",\n  \"startTime\": \"2024-09-31 12:30:00\",\n  \"price\": 100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/screenings/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"screenings",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateScreening",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"HKU1\",\n  \"location\": \"HKU Location\",\n  \"screen_distance\": 15,\n  \"lat\": 0.0,\n  \"lng\": 0.0,\n  \"seat_layout\": [\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 2, 2, 2, 2, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [1, 1, 1, 1, 1, 1, 1, 1],\n    [0, 1, 1, 1, 1, 1, 1, 0]\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/screenings/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"screenings",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Booking",
+			"item": [
+				{
+					"name": "createBooking",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"screeningId\": \"1f8b3bb5-8092-4cc7-b3f4-bd5b0bcd5669\",\n    \"seats\": [\"A4\", \"A5\", \"A6\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/bookings/",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"bookings",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "inherit"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "localhost:8080/api"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"disabled": true
+		}
+	]
+}
